@@ -244,9 +244,7 @@ class ConfigInternal {
             config = this.loadFileConfigs(this.CONFIG_PATHS[0]);
         }
 
-        _(config).keys().forEach(key => {
-            this[key] = config[key];
-        });
+        this.config = config;
     }
 
     loadFileConfigs(path) {
@@ -275,7 +273,7 @@ class ConfigInternal {
             throw new Error('Calling config.get with null or undefined argument');
         }
 
-        const value = Util._get(this, property);
+        const value = Util._get(this.config, property);
 
         // Produce an exception if the property doesn't exist
         if (value === undefined) {
@@ -291,13 +289,18 @@ class ConfigInternal {
             return false;
         }
 
-        return (Util._get(this, property) !== undefined);
+        return (Util._get(this.config, property) !== undefined);
     }
 }
 
 export default class Config {
     constructor(namespace, ...paths) {
         this.configInternal = new ConfigInternal(namespace, ...paths);
+
+        // copy keys from internal to here
+        _(this.configInternal.config).keys().forEach(key => {
+            this[key] = this.configInternal.config[key];
+        });
     }
 
     get(property) {
