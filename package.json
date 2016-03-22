@@ -36,7 +36,7 @@
     "babel-preset-react": "^6.5.0",
     "cson": "^3.0.2",
     "eslint": "^2.4.0",
-    "eslint-config-360fy": "^1.0.1",
+    "eslint-config-360fy": "^1.1.0",
     "eslint-plugin-react": "^4.2.3",
     "hjson": "^1.7.6",
     "properties": "^1.2.1",
