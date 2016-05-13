@@ -12,6 +12,8 @@ let JSON5 = null;
 let TOML = null;
 let HJSON = null;
 
+/* eslint-disable global-require,import/no-unresolved,no-underscore-dangle */
+
 class Util {
     static stripYamlComments(fileStr) {
         // First replace removes comment-only lines
