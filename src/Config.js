@@ -12,7 +12,7 @@ let JSON5 = null;
 let TOML = null;
 let HJSON = null;
 
-/* eslint-disable global-require,import/no-unresolved,no-underscore-dangle */
+/* eslint-disable import/no-unresolved */
 
 class Util {
     static stripYamlComments(fileStr) {
