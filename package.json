@@ -1,6 +1,6 @@
 {
   "name": "config-boilerplate",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "Boilerplate for config",
   "repository": "git@github.com:360fy/config-boilerplate.git",
   "scripts": {
