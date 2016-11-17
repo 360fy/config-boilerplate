@@ -34,13 +34,17 @@ class Util {
           /* Remove strings */
             .replace(stringRegex, (match) => {
                 primitives[primIndex] = match;
-                return `${uid}${primIndex++}`;
+                const ret = `${uid}${primIndex}`;
+                primIndex += 1;
+                return ret;
             })
 
             /* Remove Regexes */
-            .replace(/([^\/])(\/(?!\*|\/)(\\\/|.)+?\/[gim]{0,3})/g, (match, matchOne, matchTwo) => {
+            .replace(/([^/])(\/(?!\*|\/)(\\\/|.)+?\/[gim]{0,3})/g, (match, matchOne, matchTwo) => {
                 primitives[primIndex] = matchTwo;
-                return `${matchOne}${uid}${primIndex++}`;
+                const ret = `${matchOne}${uid}${primIndex}`;
+                primIndex += 1;
+                return ret;
             })
 
             /*
@@ -117,6 +121,7 @@ class Util {
                 } catch (e) {
                     try {
                         // If it doesn't exist, load the fallback visionmedia yaml module.
+                        // eslint-disable-next-line import/no-extraneous-dependencies
                         VisionmediaYaml = require('yaml');
                     } catch (err) {
                         // eat error here
@@ -158,18 +163,21 @@ class Util {
             configObject = JSON5.parse(content);
         } else if (format === 'hjson') {
             if (!HJSON) {
+                // eslint-disable-next-line import/no-extraneous-dependencies
                 HJSON = require('hjson');
             }
 
             configObject = HJSON.parse(content);
         } else if (format === 'toml') {
             if (!TOML) {
+                // eslint-disable-next-line import/no-extraneous-dependencies
                 TOML = require('toml');
             }
 
             configObject = TOML.parse(content);
         } else if (format === 'cson') {
             if (!CSON) {
+                // eslint-disable-next-line import/no-extraneous-dependencies
                 CSON = require('cson');
             }
             // Allow comments in CSON files
@@ -180,6 +188,7 @@ class Util {
             }
         } else if (format === 'properties') {
             if (!PPARSER) {
+                // eslint-disable-next-line import/no-extraneous-dependencies
                 PPARSER = require('properties');
             }
 
@@ -197,7 +206,7 @@ class Util {
         const cmdLineArgs = process.argv.slice(2, process.argv.length);
         const argName = `--${searchFor}=`;
 
-        for (let argvIt = 0; argvIt < cmdLineArgs.length; argvIt++) {
+        for (let argvIt = 0; argvIt < cmdLineArgs.length; argvIt += 1) {
             if (cmdLineArgs[argvIt].indexOf(argName) === 0) {
                 return cmdLineArgs[argvIt].substr(argName.length);
             }
@@ -233,9 +242,7 @@ class ConfigInternal {
             this.CONFIG_PATHS = [path];
         } else {
             this.CONFIG_PATHS = [];
-            _.forEach(configPaths, path => {
-                this.CONFIG_PATHS.push(path);
-            });
+            _.forEach(configPaths, path => this.CONFIG_PATHS.push(path));
         }
 
         let config = null;
@@ -257,8 +264,8 @@ class ConfigInternal {
 
         const configs = [];
 
-        _(baseNames).reverse().forEach(baseName => {
-            _(ExtNames).forEach(extName => {
+        _(baseNames).reverse().forEach((baseName) => {
+            _(ExtNames).forEach((extName) => {
                 const fullFilename = Path.join(path, `${baseName}.${extName}`);
                 const configObj = Util.parseFile(fullFilename);
                 if (configObj) {
@@ -300,7 +307,7 @@ export default class Config {
         this.configInternal = new ConfigInternal(namespace, ...paths);
 
         // copy keys from internal to here
-        _(this.configInternal.config).keys().forEach(key => {
+        _(this.configInternal.config).keys().forEach((key) => {
             this[key] = this.configInternal.config[key];
         });
     }
